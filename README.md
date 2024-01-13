@@ -1,1 +1,0 @@
-# noname_vac_test
