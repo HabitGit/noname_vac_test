@@ -2,37 +2,37 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PostsEntity } from './posts.entity';
+import { UsersEntity } from './users.entity';
 
 @Entity()
-export class UsersEntity {
+export class PostsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
     type: 'varchar',
-    length: 40,
-    unique: true,
+    length: '150',
     nullable: false,
+    unique: true,
   })
-  email: string;
+  name: string;
 
   @Column({
-    type: 'varchar',
+    type: 'text',
     nullable: false,
   })
-  password: string;
+  description: string;
 
-  @OneToMany(() => PostsEntity, (posts) => posts.author)
-  posts: PostsEntity[];
+  @ManyToOne(() => UsersEntity, (user) => user.posts)
+  author: UsersEntity;
 
   @CreateDateColumn()
-  CreatedAt: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  UpdatedAt: Date;
+  updatedAt: Date;
 }
