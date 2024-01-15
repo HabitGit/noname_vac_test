@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TokensEntity } from './database/entities/tokens.entity';
 import { UsersEntity } from './database/entities/users.entity';
+import { TokensModule } from './tokens/tokens.module';
 
 @Module({
   controllers: [AppController],
@@ -27,6 +28,7 @@ import { UsersEntity } from './database/entities/users.entity';
       entities: [UsersEntity, TokensEntity],
       synchronize: false,
     }),
+    TokensModule,
   ],
 })
 export class AppModule {}

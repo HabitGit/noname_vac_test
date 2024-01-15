@@ -1,6 +1,12 @@
-import {Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
-import {UsersEntity} from './users.entity';
-import {JoinColumn} from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { UsersEntity } from './users.entity';
+import { JoinColumn } from 'typeorm';
 
 @Entity()
 export class TokensEntity {
@@ -9,7 +15,6 @@ export class TokensEntity {
 
   @Column({
     type: 'text',
-    unique: true,
     nullable: false,
   })
   refreshToken: string;
