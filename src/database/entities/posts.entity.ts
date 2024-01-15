@@ -2,11 +2,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UsersEntity } from './users.entity';
 
 @Entity()
 export class PostsEntity {
@@ -27,8 +25,11 @@ export class PostsEntity {
   })
   description: string;
 
-  @ManyToOne(() => UsersEntity, (user) => user.posts)
-  author: UsersEntity;
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
+  author: string;
 
   @CreateDateColumn()
   createdAt: Date;

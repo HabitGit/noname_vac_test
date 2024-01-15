@@ -27,9 +27,6 @@ export class UsersEntity {
   })
   password: string;
 
-  @OneToMany(() => PostsEntity, (posts) => posts.author)
-  posts: PostsEntity[];
-
   @CreateDateColumn()
   CreatedAt: Date;
 
