@@ -1,4 +1,4 @@
-import {DataSource} from 'typeorm';
+import { DataSource } from 'typeorm';
 import 'dotenv/config';
 
 export const dataSource = new DataSource({
@@ -10,4 +10,4 @@ export const dataSource = new DataSource({
   database: process.env.POSTGRES_DB,
   entities: ['src/database/entities/*.entity.ts'],
   migrations: ['src/database/migrations/*.ts'],
-})
+});
