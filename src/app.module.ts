@@ -8,6 +8,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TokensEntity } from './database/entities/tokens.entity';
 import { UsersEntity } from './database/entities/users.entity';
 import { TokensModule } from './tokens/tokens.module';
+import { PostsModule } from './posts/posts.module';
+import { PostsEntity } from './database/entities/posts.entity';
 
 @Module({
   controllers: [AppController],
@@ -25,10 +27,11 @@ import { TokensModule } from './tokens/tokens.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [UsersEntity, TokensEntity],
+      entities: [UsersEntity, TokensEntity, PostsEntity],
       synchronize: false,
     }),
     TokensModule,
+    PostsModule,
   ],
 })
 export class AppModule {}

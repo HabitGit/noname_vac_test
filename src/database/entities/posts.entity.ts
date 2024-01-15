@@ -7,27 +7,33 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class UsersEntity {
+export class PostsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
     type: 'varchar',
-    length: 40,
+    length: '150',
+    nullable: false,
     unique: true,
+  })
+  name: string;
+
+  @Column({
+    type: 'text',
     nullable: false,
   })
-  email: string;
+  description: string;
 
   @Column({
     type: 'varchar',
     nullable: false,
   })
-  password: string;
+  author: string;
 
   @CreateDateColumn()
-  CreatedAt: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  UpdatedAt: Date;
+  updatedAt: Date;
 }
