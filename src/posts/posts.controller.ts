@@ -38,19 +38,19 @@ export class PostsController {
   @UseGuards(JwtAuthGuard)
   @Put('/:id')
   updatePostById(
-    @Param() id: { id: string },
+    @Param('id') id: number,
     @Body() postData: CreatePostDto,
     @Req() request,
   ) {
     const isUserEmail = request.user.email;
-    return this.postsService.updatePostById(Number(id.id), {
+    return this.postsService.updatePostById(id, {
       ...postData,
       author: isUserEmail,
     });
   }
 
   @Delete('/:id')
-  deletePostById(@Param() id: { id: string }) {
-    return this.postsService.deletePostById(Number(id.id));
+  deletePostById(@Param('id') id: number) {
+    return this.postsService.deletePostById(id);
   }
 }
