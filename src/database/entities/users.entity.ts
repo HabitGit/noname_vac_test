@@ -2,11 +2,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PostsEntity } from './posts.entity';
 
 @Entity()
 export class UsersEntity {
