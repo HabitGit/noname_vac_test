@@ -5,6 +5,7 @@ import { PostsEntity } from '../database/entities/posts.entity';
 import { Repository } from 'typeorm';
 import { IGetPosts } from './dtos/query-getPosts.interface';
 import { UsersService } from '../users/users.service';
+import { cacheClient } from '../database/data-source.redis';
 
 @Injectable()
 export class PostsService {
@@ -31,6 +32,7 @@ export class PostsService {
         HttpStatus.BAD_REQUEST,
       );
     }
+    await this.invalidCache('posts*');
     const { name, description, author } = postData;
     return this.postsRepository.save({
       name,
@@ -40,20 +42,20 @@ export class PostsService {
   }
 
   async getPosts(query: IGetPosts) {
-    const { page, size, order } = query;
+    const { page, size, order = null } = query;
     const { take, skip } = this.getPagination(page, size);
-    return this.postsRepository.find({
-      skip,
+    const cacheKey: string = `posts:${take}:${skip}:${order}`;
+
+    const cache = await cacheClient.get(cacheKey);
+    if (cache) return JSON.parse(cache);
+
+    const posts = await this.postsRepository.find({
       take,
+      skip,
       order: order ? { [order]: 'ASC' } : null,
     });
-  }
-
-  private getPagination(page: number, size: number) {
-    const take = size ? size : 10;
-    const skip = page ? page * take : 0;
-
-    return { take, skip };
+    await cacheClient.set(cacheKey, JSON.stringify(posts), { EX: 30 });
+    return posts;
   }
 
   async updatePostById(id: number, postData: CreatePostDto) {
@@ -72,15 +74,31 @@ export class PostsService {
         HttpStatus.BAD_REQUEST,
       );
     }
+    await this.invalidCache('posts*');
     await this.postsRepository.update(
       { id },
       {
         ...postData,
       },
     );
+    return;
   }
 
   async deletePostById(id: number) {
+    await this.invalidCache('posts*');
     await this.postsRepository.delete({ id });
+    return;
+  }
+
+  private getPagination(page: number, size: number) {
+    const take = size ? size : 10;
+    const skip = page ? page * take : 0;
+
+    return { take, skip };
+  }
+
+  private async invalidCache(key: string) {
+    const cacheKeys: string[] = await cacheClient.keys(key);
+    return cacheClient.del(cacheKeys);
   }
 }
