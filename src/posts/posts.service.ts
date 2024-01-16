@@ -3,7 +3,7 @@ import { CreatePostDto } from './dtos/create-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostsEntity } from '../database/entities/posts.entity';
 import { Repository } from 'typeorm';
-import { IGetPosts } from './dtos/query-getPosts.interface';
+import { GetPostsQuery } from './dtos/query-getPosts.interface';
 import { UsersService } from '../users/users.service';
 import { cacheClient } from '../database/data-source.redis';
 
@@ -41,7 +41,7 @@ export class PostsService {
     });
   }
 
-  async getPosts(query: IGetPosts) {
+  async getPosts(query: GetPostsQuery) {
     const { page, size, order = null } = query;
     const { take, skip } = this.getPagination(page, size);
     const cacheKey: string = `posts:${take}:${skip}:${order}`;
