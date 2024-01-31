@@ -1,0 +1,25 @@
+ПОДКЛЮЧЕНИЕ РЕПЛИКАЦИЙ:
+в мастер базе:
+Установить nano
+
+открыть постгрес конфиг и поменять
+
+wal_level = logical
+
+открыть pg_hba.conf
+
+host db_name user_name ip_address/32 trust
+
+Скопировать БД на реплике
+
+pg_dumpall --database=db_name --host=ip_host --global-only --no-privileges | psql
+
+pg_dump --dbname db_name --host=ip_host --create --schema-only | psql
+
+теперь внутри мастер БД создать паблишер
+
+CREATE PUBLICATION db_pub FOR ALL TABLES;
+
+теперь внутри реплецируемой бд
+
+CREATE SUBSCRIPTION db_sub CONNECTION 'host=ip_host dbname=db_name password=password' PUBLICATION db_pub;
