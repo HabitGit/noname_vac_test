@@ -22,11 +22,25 @@ import { PostsEntity } from './database/entities/posts.entity';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      port: Number(process.env.POSTGRES_PORT_OUTSIDE),
-      username: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_DB,
+      logging: true,
+      replication: {
+        master: {
+          host: process.env.POSTGRES_HOST,
+          port: Number(process.env.POSTGRES_PORT_OUTSIDE),
+          username: process.env.POSTGRES_USER,
+          password: process.env.POSTGRES_PASSWORD,
+          database: process.env.POSTGRES_DB,
+        },
+        slaves: [
+          {
+            host: process.env.POSTGRES_HOST2,
+            port: Number(process.env.POSTGRES_PORT_OUTSIDE2),
+            username: process.env.POSTGRES_USER2,
+            password: process.env.POSTGRES_PASSWORD2,
+            database: process.env.POSTGRES_DB2,
+          },
+        ],
+      },
       entities: [UsersEntity, TokensEntity, PostsEntity],
       synchronize: false,
     }),
